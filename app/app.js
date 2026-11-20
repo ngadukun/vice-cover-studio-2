@@ -591,7 +591,11 @@ const SHOT_PRESETS = {
   'cover-hero': {
     layout: 'hero3', grade: 'neon', aspect: { w: 1080, h: 1350 },
     title: 'NEON HEAT', subtitle: 'midnight run on the boulevard', badge: 'LAUNCH WEEK',
-    assign: [1, 0, 2], zooms: [1.1, 1.18, 1.06], selected: 0,
+    assign: [1, 0, 2, 0], zooms: [1.1, 1.18, 1.06, 1.55],
+    // The fourth panel reuses the boulevard sample at a tight off-centre crop,
+    // so it reads as a different shot from the same photo in the top-right panel.
+    pans: [[0.5, 0.42], [0.5, 0.42], [0.5, 0.42], [0.12, 0.72]],
+    selected: 0,
   },
   'cover-wide': {
     layout: 'full', grade: 'vice', aspect: { w: 1920, h: 1080 },
@@ -610,7 +614,8 @@ function applyPreset(preset) {
   state.panels = preset.assign.map((photo, i) => ({
     ...freshPanel(photo),
     zoom: preset.zooms[i] ?? 1,
-    panY: 0.42,
+    panX: preset.pans?.[i]?.[0] ?? 0.5,
+    panY: preset.pans?.[i]?.[1] ?? 0.42,
   }));
   state.selected = preset.selected ?? 0;
   // Reflect the preset in the controls so the studio shot shows a lived-in editor.
